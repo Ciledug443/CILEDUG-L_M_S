@@ -141,10 +141,11 @@
 
   <!-- JavaScript Controller Engine -->
   <script>
-    // MASUKKAN API KEY SUPABASE ANDA DI SINI
-    const SUPABASE_URL = 'https://pclcvnkzzmczdsfmfenx.supabase.co; // Ganti jika URL berbeda
-    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBjbGN2bmt6em1jemRzZm1mZW54Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgwNzg1NzIsImV4cCI6MjEwMzY1NDU3Mn0.HvpfwjvrfohkQz21GdnYSgC7Qkatv_ILKE_OlioDlus';
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    const SUPABASE_URL = 'https://pclcvnkzzmczdsfmfenx.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI...';
+    
+    // Inisialisasi Client Supabase v2
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     document.addEventListener('DOMContentLoaded', function() {
       initApp();
