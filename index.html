@@ -3,141 +3,467 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AZ·KO Academy</title>
-    <!-- Tailwind CSS untuk styling cepat -->
+    <title>AZ·KO Academy - Product Knowledge LMS</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Supabase JS Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f9fafb; }
-        .nav-active { color: #b91c1c; border-bottom: 2px solid #b91c1c; }
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #b91c1c 0%, #7f1d1d 100%); }
+        .nav-item.active { color: #b91c1c; border-bottom: 3px solid #b91c1c; }
+        .fade-in { animation: fadeIn 0.3s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
-<body>
+<body class="bg-gray-50">
 
-    <!-- NAVBAR -->
-    <nav class="bg-white shadow-sm border-b sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
-                <div class="flex items-center">
-                    <span class="text-2xl font-bold text-red-700">AZ·KO Academy</span>
-                </div>
-                <div class="flex space-x-8 items-center">
-                    <a href="#" class="nav-active px-3 py-2 text-sm font-medium flex items-center gap-2">
-                         Home
-                    </a>
-                    <a href="#" class="text-gray-500 hover:text-gray-700 px-3 py-2 text-sm font-medium flex items-center gap-2">
-                        📚 Catalog
-                    </a>
-                    <a href="#" class="text-gray-500 hover:text-gray-700 px-3 py-2 text-sm font-medium flex items-center gap-2">
-                        🏆 Leaderboard
-                    </a>
-                </div>
-                <div class="flex items-center gap-4">
-                    <div class="text-right hidden sm:block">
-                        <div class="text-sm font-bold text-gray-900">Manager Ciledug</div>
-                        <div class="text-xs text-gray-500">Lv.3 Senior Expert</div>
+    <!-- ==========================================
+         LOGIN PAGE
+    ========================================== -->
+    <div id="loginPage" class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full space-y-8">
+            <div class="text-center">
+                <h1 class="text-4xl font-bold text-red-700 mb-2">AZ·KO Academy</h1>
+                <p class="text-gray-600">Product Knowledge Learning Management System</p>
+            </div>
+            <div class="bg-white rounded-2xl shadow-xl p-8">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6 text-center">Masuk ke Akun Anda</h2>
+                <form id="loginForm" class="space-y-6" onsubmit="handleLogin(event)">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                        <input id="loginEmail" type="email" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500" placeholder="nama@perusahaan.com">
                     </div>
-                    <div class="bg-red-50 px-3 py-1 rounded-full border border-red-100">
-                        <span class="font-bold text-red-700 text-sm">1000</span> <span class="text-xs text-red-600">Poin</span>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                        <input id="loginPassword" type="password" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500" placeholder="••••••••">
+                    </div>
+                    <div id="loginError" class="hidden bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm"></div>
+                    <button type="submit" id="loginBtn" class="w-full gradient-bg text-white py-3 px-4 rounded-lg font-semibold hover:bg-red-800 transition-all">
+                        Masuk ke Dashboard
+                    </button>
+                </form>
+                <div class="mt-6 pt-6 border-t border-gray-200">
+                    <p class="text-xs text-gray-500 text-center mb-3">Akun Demo:</p>
+                    <div class="space-y-2 text-xs">
+                        <div class="p-2 bg-gray-50 rounded"><span class="font-semibold">Karyawan:</span> karyawan@azko.com / password123</div>
+                        <div class="p-2 bg-gray-50 rounded"><span class="font-semibold">Manager:</span> manager@azko.com / password123</div>
+                        <div class="p-2 bg-gray-50 rounded"><span class="font-semibold">Admin:</span> admin@azko.com / password123</div>
                     </div>
                 </div>
             </div>
         </div>
-    </nav>
+    </div>
 
-    <!-- MAIN CONTENT -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        
-        <!-- Status Bar -->
-        <div class="mb-6 flex items-center gap-2 text-sm text-green-600 bg-green-50 p-3 rounded-lg border border-green-200">
-            <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-            Connected to Supabase
-        </div>
-
-        <!-- Section Title -->
-        <h2 class="text-2xl font-bold text-gray-800 mb-6">Katalog Modul Produk</h2>
-
-        <!-- Modules Grid -->
-        <div id="modulesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- Loading State -->
-            <div class="col-span-full text-center py-12 text-gray-500">
-                <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-red-700 mb-2"></div>
-                <p>Memuat modul dari Supabase...</p>
+    <!-- ==========================================
+         DASHBOARD PAGE (Hidden by default)
+    ========================================== -->
+    <div id="dashboardPage" class="hidden">
+        <!-- Navbar -->
+        <nav class="bg-white shadow-md sticky top-0 z-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between h-16">
+                    <div class="flex items-center">
+                        <h1 class="text-2xl font-bold text-red-700">AZ·KO Academy</h1>
+                    </div>
+                    <div class="hidden md:flex items-center space-x-6">
+                        <button onclick="showSection('home')" id="nav-home" class="nav-item active px-3 py-2 text-sm font-medium flex items-center gap-2">
+                            <i class="bi bi-house-fill"></i> Home
+                        </button>
+                        <button onclick="showSection('catalog')" id="nav-catalog" class="nav-item px-3 py-2 text-sm font-medium flex items-center gap-2 text-gray-600">
+                            <i class="bi bi-book"></i> Katalog
+                        </button>
+                        <button onclick="showSection('leaderboard')" id="nav-leaderboard" class="nav-item px-3 py-2 text-sm font-medium flex items-center gap-2 text-gray-600">
+                            <i class="bi bi-trophy"></i> Leaderboard
+                        </button>
+                        <button onclick="showSection('rewards')" id="nav-rewards" class="nav-item px-3 py-2 text-sm font-medium flex items-center gap-2 text-gray-600">
+                            <i class="bi bi-gift"></i> Rewards
+                        </button>
+                        <button onclick="showSection('admin')" id="nav-admin" class="nav-item hidden px-3 py-2 text-sm font-medium flex items-center gap-2 text-gray-600">
+                            <i class="bi bi-gear"></i> Admin
+                        </button>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div class="text-right hidden sm:block">
+                            <div id="userName" class="text-sm font-semibold"></div>
+                            <div id="userRole" class="text-xs text-gray-500"></div>
+                        </div>
+                        <div class="bg-red-50 px-4 py-2 rounded-full border border-red-200">
+                            <span id="userPoin" class="font-bold text-red-700">0</span> <span class="text-xs text-red-600">Poin</span>
+                        </div>
+                        <button onclick="logout()" class="text-gray-500 hover:text-red-600"><i class="bi bi-box-arrow-right text-xl"></i></button>
+                    </div>
+                </div>
             </div>
-        </div>
+        </nav>
 
-    </main>
-
-    <!-- JAVASCRIPT LOGIC -->
-    <script>
-    // ==========================================
-    // KONFIGURASI SUPABASE (HANYA SEKALI)
-    // ==========================================
-    const SUPABASE_URL = 'https://pclcvnkzzmczdsfmfenx.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBjbGN2bmt6em1jemRzZm1mZW54Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgwNzg1NzIsImV4cCI6MjEwMzY1NDU3Mn0.HvpfwjvrfohkQz21GdnYSgC7Qkatv_ILKE_OlioDlus'; // GANTI dengan key Anda
-    
-    // Inisialisasi client (HANYA SEKALI)
-    const { createClient } = supabase;
-    const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    // ==========================================
-    // FUNGSI LOAD MODUL
-    // ==========================================
-    async function loadModules() {
-        const grid = document.getElementById('modulesGrid');
-        
-        try {
-            const { data, error } = await supabaseClient
-                .from('products')
-                .select('*')
-                .order('created_at', { ascending: false });
-
-            if (error) throw error;
-
-            if (!data || data.length === 0) {
-                grid.innerHTML = `
-                    <div class="col-span-full text-center py-12 bg-white rounded-lg shadow">
-                        <p class="text-gray-500">Belum ada modul. Tambahkan data di Supabase Table Editor.</p>
-                    </div>`;
-                return;
-            }
-
-            grid.innerHTML = data.map(product => `
-                <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
-                    <img src="${product.image_url || 'https://via.placeholder.com/400x200?text=No+Image'}" 
-                         class="w-full h-48 object-cover">
-                    <div class="p-5">
-                        <div class="text-xs font-mono text-gray-500 mb-1">SKU: ${product.sku || '-'}</div>
-                        <h3 class="text-lg font-bold text-gray-900 mb-2">${product.title}</h3>
-                        <p class="text-sm text-gray-600 mb-4">${product.description || ''}</p>
-                        <div class="flex justify-between items-center">
-                            <span class="px-2 py-1 text-xs font-semibold rounded-full ${
-                                product.category === 'Mandatory' ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700'
-                            }">${product.category || 'General'}</span>
-                            <button onclick="startQuiz('${product.id}')" 
-                                    class="bg-red-700 hover:bg-red-800 text-white px-4 py-2 rounded-lg text-sm font-semibold">
-                                Mulai Posttest
-                            </button>
+        <!-- Main Content -->
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            
+            <!-- HOME SECTION -->
+            <section id="section-home" class="section fade-in">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-orange-500">
+                        <div class="flex items-center justify-between">
+                            <div><p class="text-sm text-gray-500">Day Streak</p><p class="text-3xl font-bold"><span id="statStreak">0</span> Hari</p></div>
+                            <i class="bi bi-fire text-4xl text-orange-500"></i>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-blue-500">
+                        <div class="flex items-center justify-between">
+                            <div><p class="text-sm text-gray-500">Modul Selesai</p><p class="text-3xl font-bold"><span id="statCompleted">0</span></p></div>
+                            <i class="bi bi-check-circle text-4xl text-blue-500"></i>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-green-500">
+                        <div class="flex items-center justify-between">
+                            <div><p class="text-sm text-gray-500">Total Poin</p><p class="text-3xl font-bold"><span id="statPoin">0</span></p></div>
+                            <i class="bi bi-star text-4xl text-green-500"></i>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-purple-500">
+                        <div class="flex items-center justify-between">
+                            <div><p class="text-sm text-gray-500">Level</p><p id="statLevel" class="text-lg font-bold">Lv.1 Trainee</p></div>
+                            <i class="bi bi-award text-4xl text-purple-500"></i>
                         </div>
                     </div>
                 </div>
-            `).join('');
 
-        } catch (error) {
-            console.error('Error:', error);
-            grid.innerHTML = `
-                <div class="col-span-full text-center py-12 bg-red-50 rounded-lg border border-red-200">
-                    <p class="text-red-600 font-semibold">Error: ${error.message}</p>
-                </div>`;
+                <div class="bg-gradient-to-r from-red-600 to-red-800 rounded-2xl shadow-xl p-8 text-white mb-8">
+                    <h2 class="text-2xl font-bold mb-2">Selamat Datang Kembali!</h2>
+                    <p class="text-red-100">Lanjutkan pembelajaran Anda untuk meningkatkan product knowledge.</p>
+                </div>
+            </section>
+
+            <!-- CATALOG SECTION -->
+            <section id="section-catalog" class="section hidden fade-in">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800">Katalog Modul Produk</h2>
+                    <button onclick="bukaModalModul()" id="btnTambahModul" class="hidden bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2">
+                        <i class="bi bi-plus-circle"></i> Tambah Modul
+                    </button>
+                </div>
+                <div id="modulesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="text-center py-12"><div class="animate-spin rounded-full h-8 w-8 border-b-2 border-red-700 mx-auto mb-2"></div><p class="text-gray-500">Memuat modul...</p></div>
+                </div>
+            </section>
+
+            <!-- LEADERBOARD SECTION -->
+            <section id="section-leaderboard" class="section hidden fade-in">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Peringkat Karyawan</h2>
+                <div id="leaderboardContainer" class="bg-white rounded-xl shadow-md p-6">
+                    <div class="text-center py-8 text-gray-500">Memuat leaderboard...</div>
+                </div>
+            </section>
+
+            <!-- REWARDS SECTION -->
+            <section id="section-rewards" class="section hidden fade-in">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Toko Hadiah</h2>
+                <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+                    <p class="text-red-800 font-semibold">Poin Anda: <span id="rewardPoin" class="text-2xl">0</span> Pts</p>
+                </div>
+                <div id="rewardsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Rewards will be loaded here -->
+                </div>
+            </section>
+
+            <!-- ADMIN SECTION -->
+            <section id="section-admin" class="section hidden fade-in">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Admin Dashboard</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                    <div class="bg-white rounded-xl shadow-md p-6 text-center">
+                        <p class="text-gray-500 text-sm">Total User</p>
+                        <p id="adminTotalUsers" class="text-3xl font-bold text-red-700">0</p>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-md p-6 text-center">
+                        <p class="text-gray-500 text-sm">Total Modul</p>
+                        <p id="adminTotalModules" class="text-3xl font-bold text-red-700">0</p>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-md p-6 text-center">
+                        <p class="text-gray-500 text-sm">Modul Mandatory</p>
+                        <p id="adminTotalMandatory" class="text-3xl font-bold text-red-700">0</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- MODAL TAMBAH MODUL -->
+    <div id="modalTambahModul" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div class="p-6 border-b flex justify-between items-center sticky top-0 bg-white">
+                <h3 class="text-xl font-bold">Tambah Modul Produk</h3>
+                <button onclick="tutupModalModul()" class="text-gray-500 hover:text-red-500 text-2xl">&times;</button>
+            </div>
+            <form onsubmit="simpanModul(event)" class="p-6 space-y-4">
+                <div><label class="block text-sm font-medium text-gray-700 mb-1">SKU</label><input id="modSku" type="text" required class="w-full border rounded-lg px-3 py-2"></div>
+                <div><label class="block text-sm font-medium text-gray-700 mb-1">Judul Produk</label><input id="modJudul" type="text" required class="w-full border rounded-lg px-3 py-2"></div>
+                <div><label class="block text-sm font-medium text-gray-700 mb-1">Deskripsi</label><textarea id="modDeskripsi" rows="3" required class="w-full border rounded-lg px-3 py-2"></textarea></div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div><label class="block text-sm font-medium text-gray-700 mb-1">Kategori</label><select id="modKategori" class="w-full border rounded-lg px-3 py-2"><option value="Mandatory">Mandatory</option><option value="Strengthening">Strengthening</option><option value="Optional">Optional</option></select></div>
+                    <div><label class="block text-sm font-medium text-gray-700 mb-1">URL Gambar</label><input id="modGambar" type="url" class="w-full border rounded-lg px-3 py-2"></div>
+                </div>
+                <div><label class="block text-sm font-medium text-gray-700 mb-1">Bank Soal (JSON)</label><textarea id="modSoal" rows="4" class="w-full border rounded-lg px-3 py-2 font-mono text-xs" placeholder='[{"text":"Soal?","options":["A","B","C","D"],"correct":0}]'></textarea></div>
+                <div class="flex justify-end gap-3 pt-4 border-t">
+                    <button type="button" onclick="tutupModalModul()" class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">Batal</button>
+                    <button type="submit" class="px-6 py-2 bg-red-700 hover:bg-red-800 text-white rounded-lg font-semibold">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        // ==========================================
+        // KONFIGURASI SUPABASE
+        // ==========================================
+        const SUPABASE_URL = 'https://pclcvnkzzmczdsfmfenx.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBjbGN2bmt6em1jemRzZm1mZW54Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgwNzg1NzIsImV4cCI6MjEwMzY1NDU3Mn0.HvpfwjvrfohkQz21GdnYSgC7Qkatv_ILKE_OlioDlus'; // GANTI DENGAN KEY ANDA
+        
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        let currentUser = null;
+
+        // ==========================================
+        // AUTH FUNCTIONS
+        // ==========================================
+        async function handleLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const errorDiv = document.getElementById('loginError');
+            const btn = document.getElementById('loginBtn');
+            
+            errorDiv.classList.add('hidden');
+            btn.disabled = true;
+            btn.innerHTML = '<div class="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full mx-auto"></div>';
+            
+            try {
+                const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+                if (error) throw error;
+                
+                const { data: profile } = await supabase.from('profiles').select('*').eq('id', data.user.id).single();
+                if (!profile) throw new Error('Profile tidak ditemukan');
+                
+                localStorage.setItem('currentUser', JSON.stringify(profile));
+                localStorage.setItem('isAuthenticated', 'true');
+                showDashboard(profile);
+            } catch (error) {
+                errorDiv.textContent = '❌ ' + error.message;
+                errorDiv.classList.remove('hidden');
+                btn.disabled = false;
+                btn.innerHTML = 'Masuk ke Dashboard';
+            }
         }
-    }
 
-    function startQuiz(productId) {
-        alert('Fitur quiz akan segera hadir! Product ID: ' + productId);
-    }
+        async function logout() {
+            await supabase.auth.signOut();
+            localStorage.clear();
+            location.reload();
+        }
 
-    document.addEventListener('DOMContentLoaded', loadModules);
-</script>
+        // ==========================================
+        // DASHBOARD FUNCTIONS
+        // ==========================================
+        function showDashboard(user) {
+            currentUser = user;
+            document.getElementById('loginPage').classList.add('hidden');
+            document.getElementById('dashboardPage').classList.remove('hidden');
+            
+            document.getElementById('userName').textContent = user.nama;
+            document.getElementById('userRole').textContent = user.role;
+            document.getElementById('userPoin').textContent = user.poin || 0;
+            document.getElementById('statStreak').textContent = user.streak || 0;
+            document.getElementById('statPoin').textContent = user.poin || 0;
+            document.getElementById('statLevel').textContent = user.level || 'Lv.1 Trainee';
+            document.getElementById('rewardPoin').textContent = user.poin || 0;
+            
+            // Show admin menu untuk admin/manager
+            if (user.role === 'ADMIN' || user.role === 'MANAGER') {
+                document.getElementById('nav-admin').classList.remove('hidden');
+                document.getElementById('btnTambahModul').classList.remove('hidden');
+                loadAdminStats();
+            }
+            
+            loadModules();
+            loadLeaderboard();
+            loadRewards();
+        }
+
+        function showSection(section) {
+            document.querySelectorAll('.section').forEach(el => el.classList.add('hidden'));
+            document.getElementById('section-' + section).classList.remove('hidden');
+            
+            document.querySelectorAll('.nav-item').forEach(el => {
+                el.classList.remove('active');
+                el.classList.add('text-gray-600');
+            });
+            document.getElementById('nav-' + section).classList.add('active');
+            document.getElementById('nav-' + section).classList.remove('text-gray-600');
+        }
+
+        // ==========================================
+        // MODULE FUNCTIONS
+        // ==========================================
+        async function loadModules() {
+            const grid = document.getElementById('modulesGrid');
+            try {
+                const { data, error } = await supabase.from('products').select('*').order('id', { ascending: false });
+                if (error) throw error;
+                
+                if (!data || data.length === 0) {
+                    grid.innerHTML = '<div class="col-span-full text-center py-12 text-gray-500">Belum ada modul</div>';
+                    return;
+                }
+                
+                grid.innerHTML = data.map(p => `
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+                        <img src="${p.image_url || 'https://via.placeholder.com/400x200'}" class="w-full h-48 object-cover">
+                        <div class="p-5">
+                            <div class="text-xs text-gray-500 mb-1">SKU: ${p.sku || '-'}</div>
+                            <h3 class="font-bold text-lg mb-2">${p.title}</h3>
+                            <p class="text-sm text-gray-600 mb-4 line-clamp-3">${p.description || ''}</p>
+                            <div class="flex justify-between items-center">
+                                <span class="px-2 py-1 text-xs rounded-full ${p.category === 'Mandatory' ? 'bg-red-100 text-red-700' : p.category === 'Strengthening' ? 'bg-yellow-100 text-yellow-700' : 'bg-blue-100 text-blue-700'}">${p.category}</span>
+                                <button onclick="startQuiz('${p.id}')" class="bg-red-700 hover:bg-red-800 text-white px-4 py-2 rounded-lg text-sm font-semibold">Mulai Posttest</button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                grid.innerHTML = '<div class="col-span-full text-center py-12 text-red-600">Error: ' + error.message + '</div>';
+            }
+        }
+
+        function startQuiz(productId) {
+            alert('Fitur quiz akan segera hadir! Product ID: ' + productId);
+        }
+
+        // ==========================================
+        // ADMIN FUNCTIONS
+        // ==========================================
+        function bukaModalModul() {
+            document.getElementById('modalTambahModul').classList.remove('hidden');
+        }
+
+        function tutupModalModul() {
+            document.getElementById('modalTambahModul').classList.add('hidden');
+        }
+
+        async function simpanModul(event) {
+            event.preventDefault();
+            
+            const soalText = document.getElementById('modSoal').value.trim();
+            let bankSoal = [];
+            if (soalText) {
+                try { bankSoal = JSON.parse(soalText); } 
+                catch (e) { alert('Format JSON salah!'); return; }
+            }
+            
+            try {
+                const { error } = await supabase.from('products').insert([{
+                    sku: document.getElementById('modSku').value,
+                    title: document.getElementById('modJudul').value,
+                    description: document.getElementById('modDeskripsi').value,
+                    category: document.getElementById('modKategori').value,
+                    image_url: document.getElementById('modGambar').value || 'https://via.placeholder.com/400x200',
+                    questions: bankSoal
+                }]);
+                
+                if (error) throw error;
+                alert('✅ Modul berhasil ditambahkan!');
+                tutupModalModul();
+                loadModules();
+                event.target.reset();
+            } catch (error) {
+                alert('❌ Gagal: ' + error.message);
+            }
+        }
+
+        async function loadAdminStats() {
+            try {
+                const { data: users } = await supabase.from('profiles').select('*');
+                const { data: modules } = await supabase.from('products').select('*');
+                
+                document.getElementById('adminTotalUsers').textContent = users?.length || 0;
+                document.getElementById('adminTotalModules').textContent = modules?.length || 0;
+                document.getElementById('adminTotalMandatory').textContent = modules?.filter(m => m.category === 'Mandatory').length || 0;
+            } catch (error) {
+                console.error('Error loading stats:', error);
+            }
+        }
+
+        // ==========================================
+        // LEADERBOARD & REWARDS
+        // ==========================================
+        async function loadLeaderboard() {
+            const container = document.getElementById('leaderboardContainer');
+            try {
+                const { data } = await supabase.from('profiles').select('nama, poin, level, divisi').order('poin', { ascending: false }).limit(10);
+                
+                container.innerHTML = data.map((u, i) => `
+                    <div class="flex items-center justify-between p-4 ${i === 0 ? 'bg-yellow-50' : 'bg-gray-50'} rounded-lg mb-2">
+                        <div class="flex items-center gap-3">
+                            <span class="text-2xl font-bold ${i === 0 ? 'text-yellow-600' : 'text-gray-400'}">${i === 0 ? '🏆' : '#' + (i+1)}</span>
+                            <div>
+                                <div class="font-semibold">${u.nama}</div>
+                                <div class="text-sm text-gray-500">${u.level}</div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="font-bold text-red-700">${u.poin} Poin</div>
+                            <div class="text-xs text-gray-500">${u.divisi || '-'}</div>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                container.innerHTML = '<div class="text-center text-red-600">Error: ' + error.message + '</div>';
+            }
+        }
+
+        function loadRewards() {
+            const rewards = [
+                { id: 'rew-1', name: 'Voucher Kopi', cost: 150, desc: 'Kopi gratis di kantin' },
+                { id: 'rew-2', name: 'Parkir Prioritas', cost: 350, desc: 'Parkir depan 1 minggu' },
+                { id: 'rew-3', name: 'Tumbler Premium', cost: 400, desc: 'Merchandise eksklusif' }
+            ];
+            
+            document.getElementById('rewardsGrid').innerHTML = rewards.map(r => `
+                <div class="bg-white rounded-xl shadow-md p-6 border hover:shadow-lg transition-shadow">
+                    <h3 class="font-bold text-lg mb-2">${r.name}</h3>
+                    <p class="text-sm text-gray-600 mb-4">${r.desc}</p>
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold text-red-700">${r.cost} Pts</span>
+                        <button onclick="redeemReward('${r.id}', ${r.cost})" ${currentUser.poin < r.cost ? 'disabled class="bg-gray-300"' : 'class="bg-red-700 hover:bg-red-800"'} class="text-white px-4 py-2 rounded-lg text-sm transition-colors">
+                            ${currentUser.poin < r.cost ? 'Poin Kurang' : 'Tukar'}
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function redeemReward(rewardId, cost) {
+            if (!confirm(`Tukarkan ${cost} poin untuk reward ini?`)) return;
+            
+            try {
+                await supabase.rpc('add_points', { p_user_id: currentUser.id, p_points: -cost });
+                alert('✅ Redemption berhasil!');
+                location.reload();
+            } catch (error) {
+                alert(' Gagal: ' + error.message);
+            }
+        }
+
+        // ==========================================
+        // INIT APP
+        // ==========================================
+        window.addEventListener('DOMContentLoaded', async () => {
+            const savedUser = localStorage.getItem('currentUser');
+            const isAuthenticated = localStorage.getItem('isAuthenticated');
+            
+            if (savedUser && isAuthenticated === 'true') {
+                showDashboard(JSON.parse(savedUser));
+            }
+        });
+    </script>
 </body>
 </html>
