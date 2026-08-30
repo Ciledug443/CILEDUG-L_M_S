@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html class="light" lang="id">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>AZ·KO Academy — Product Knowledge LMS</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#b70011",
+            "primary-container": "#dc2626",
+            "on-primary": "#ffffff",
+            "on-primary-container": "#fff6f5",
+            "surface": "#f8f9fa",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low": "#f3f4f5",
+            "surface-container": "#edeeef",
+            "on-surface": "#191c1d",
+            "on-surface-variant": "#5c403c",
+            "outline-variant": "#e6bdb8",
+            "tertiary-container": "#a06500",
+            "background": "#f8f9fa",
+            "on-background": "#191c1d"
+          },
+          fontFamily: {
+            "headline-lg": ["Montserrat"],
+            "headline-md": ["Montserrat"],
+            "headline-sm": ["Montserrat"],
+            "display-lg": ["Montserrat"],
+            "body-lg": ["Inter"],
+            "body-md": ["Inter"],
+            "label-lg": ["Inter"]
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-background text-on-background min-h-screen pb-20 md:pb-0 md:pt-16">
+
+  <!-- Desktop Navigation Bar -->
+  <header class="bg-surface border-b border-outline-variant fixed top-0 left-0 w-full z-50 justify-between items-center px-8 h-16 hidden md:flex">
+    <span class="font-headline-md text-2xl font-bold text-primary">AZ·KO Academy</span>
+    <nav class="flex gap-6">
+      <button onclick="switchView('home')" class="text-primary font-label-lg px-4 py-2 rounded-lg flex items-center gap-2">
+        <span class="material-symbols-outlined">home</span> Home
+      </button>
+      <button onclick="switchView('catalog')" class="text-on-surface-variant hover:text-primary font-label-lg px-4 py-2 rounded-lg flex items-center gap-2">
+        <span class="material-symbols-outlined">import_contacts</span> Catalog
+      </button>
+      <button onclick="switchView('leaderboard')" class="text-on-surface-variant hover:text-primary font-label-lg px-4 py-2 rounded-lg flex items-center gap-2">
+        <span class="material-symbols-outlined">leaderboard</span> Leaderboard
+      </button>
+    </nav>
+    <div class="flex items-center gap-4">
+      <span id="user-display-name" class="font-label-lg text-on-surface-variant">Manager Ciledug</span>
+    </div>
+  </header>
+
+  <!-- Mobile Header -->
+  <header class="md:hidden bg-surface border-b border-outline-variant flex justify-between items-center px-4 h-16 sticky top-0 z-40">
+    <span class="font-headline-md text-xl font-bold text-primary">AZ·KO</span>
+    <span id="user-display-mobile" class="font-label-md text-on-surface-variant">Manager Ciledug</span>
+  </header>
+
+  <!-- VIEW 1: DASHBOARD HOME -->
+  <main id="view-home" class="spa-view max-w-[1440px] mx-auto px-4 md:px-8 py-6">
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <div class="bg-surface-container-lowest rounded-xl border border-outline-variant/30 p-6 flex items-center gap-4 shadow-sm">
+        <div class="w-14 h-14 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold text-xl">M</div>
+        <div>
+          <h2 id="card-user-name" class="font-headline-sm text-lg text-on-background">Manager Ciledug</h2>
+          <p id="card-user-level" class="font-label-lg text-tertiary-container mt-1">Lv.3 Senior Expert</p>
+          <p id="card-user-poin" class="font-label-md text-on-surface-variant mt-1">1000 Poin</p>
+        </div>
+      </div>
+      <div class="bg-surface-container-lowest rounded-xl border border-outline-variant/30 p-6 flex items-center justify-between shadow-sm">
+        <div class="flex items-center gap-4">
+          <div class="bg-primary p-3 rounded-full text-white">
+            <span class="material-symbols-outlined text-3xl">local_fire_department</span>
+          </div>
+          <div>
+            <h3 id="card-user-streak" class="font-display-lg text-3xl font-extrabold text-on-background">7</h3>
+            <p class="font-label-lg text-on-surface-variant uppercase tracking-wider">Day Streak</p>
+          </div>
+        </div>
+      </div>
+      <div class="bg-surface-container-lowest rounded-xl border border-outline-variant/30 p-6 flex items-center justify-between shadow-sm">
+        <div>
+          <h3 class="font-headline-sm text-lg text-on-background">Status Database</h3>
+          <p class="font-body-sm text-emerald-600 mt-1 font-semibold">● Connected to Supabase</p>
+        </div>
+        <span class="material-symbols-outlined text-4xl text-primary">cloud_done</span>
+      </div>
+    </section>
+
+    <!-- Continue Learning Section -->
+    <section>
+      <h2 class="font-headline-md text-xl text-on-background mb-4">Continue Learning</h2>
+      <div id="catalog-container" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Modul dari Supabase akan ditampilkan di sini -->
+      </div>
+    </section>
+  </main>
+
+  <!-- VIEW 2: CATALOG -->
+  <main id="view-catalog" class="spa-view hidden max-w-[1440px] mx-auto px-4 md:px-8 py-6">
+    <h2 class="font-headline-lg text-2xl text-on-surface mb-4">Katalog Modul Produk</h2>
+    <div id="catalog-grid-full" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+  </main>
+
+  <!-- VIEW 3: LEADERBOARD -->
+  <main id="view-leaderboard" class="spa-view hidden max-w-3xl mx-auto px-4 py-6">
+    <h1 class="font-headline-lg text-2xl text-center text-on-background mb-6">Peringkat Karyawan</h1>
+    <div id="leaderboard-list" class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden"></div>
+  </main>
+
+  <!-- Mobile Navigation Bar -->
+  <nav class="fixed bottom-0 left-0 w-full bg-surface border-t border-outline-variant flex justify-around items-center h-16 md:hidden z-50">
+    <button onclick="switchView('home')" class="flex flex-col items-center text-on-surface-variant">
+      <span class="material-symbols-outlined">home</span>
+      <span class="text-xs">Home</span>
+    </button>
+    <button onclick="switchView('catalog')" class="flex flex-col items-center text-on-surface-variant">
+      <span class="material-symbols-outlined">import_contacts</span>
+      <span class="text-xs">Catalog</span>
+    </button>
+    <button onclick="switchView('leaderboard')" class="flex flex-col items-center text-on-surface-variant">
+      <span class="material-symbols-outlined">leaderboard</span>
+      <span class="text-xs">Leaderboard</span>
+    </button>
+  </nav>
+
+  <!-- JavaScript Controller Engine -->
+  <script>
+    // MASUKKAN API KEY SUPABASE ANDA DI SINI
+    const SUPABASE_URL = 'https://pclcvnkzzmczdsfmfenx.supabase.co'; // Ganti jika URL berbeda
+    const SUPABASE_KEY = 'PASTE_ANON_PUBLIC_KEY_ANDA_DI_SINI';
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    document.addEventListener('DOMContentLoaded', function() {
+      initApp();
+    });
+
+    async function initApp() {
+      await loadProducts();
+      await loadLeaderboard();
+    }
+
+    function switchView(viewName) {
+      document.querySelectorAll('.spa-view').forEach(el => el.classList.add('hidden'));
+      const activeView = document.getElementById('view-' + viewName);
+      if (activeView) activeView.classList.remove('hidden');
+    }
+
+    async function loadProducts() {
+      const { data: products, error } = await supabaseClient.from('products').select('*');
+      if (error) {
+        console.error('Gagal mengambil modul:', error);
+        return;
+      }
+
+      const container = document.getElementById('catalog-container');
+      const containerFull = document.getElementById('catalog-grid-full');
+
+      if (!products || products.length === 0) {
+        const emptyMsg = '<p class="text-on-surface-variant col-span-3">Belum ada modul di database. Tambahkan data di tabel products Supabase.</p>';
+        if (container) container.innerHTML = emptyMsg;
+        if (containerFull) containerFull.innerHTML = emptyMsg;
+        return;
+      }
+
+      const html = products.map(p => `
+        <div class="bg-surface-container-lowest rounded-xl border border-outline-variant p-4 hover:shadow-md transition-all">
+          <img src="${p.image_url || 'https://via.placeholder.com/300x200/DC2626/FFFFFF?text=AZ%C2%B7KO'}" class="w-full h-40 object-cover rounded-lg mb-3"/>
+          <span class="text-xs text-on-surface-variant font-semibold">SKU: ${p.sku || '-'}</span>
+          <h3 class="font-headline-sm text-md text-on-surface mt-1 font-bold">${p.title}</h3>
+          <p class="text-xs text-on-surface-variant mt-1 line-clamp-2">${p.description || ''}</p>
+          <button onclick="alert('Mulai kuis untuk modul: ${p.title}')" class="mt-4 w-full py-2 bg-primary text-on-primary font-label-lg rounded-lg">Mulai Posttest</button>
+        </div>
+      `).join('');
+
+      if (container) container.innerHTML = html;
+      if (containerFull) containerFull.innerHTML = html;
+    }
+
+    async function loadLeaderboard() {
+      const { data: users, error } = await supabaseClient.from('users').select('*').order('poin', { ascending: false });
+      const container = document.getElementById('leaderboard-list');
+      if (error || !users || users.length === 0) {
+        if (container) container.innerHTML = '<p class="p-4 text-center text-on-surface-variant">Belum ada data peringkat.</p>';
+        return;
+      }
+
+      container.innerHTML = users.map((u, idx) => `
+        <div class="flex items-center justify-between p-4 border-b border-outline-variant/30">
+          <div class="flex items-center gap-4">
+            <span class="font-bold w-6">${idx + 1}</span>
+            <div>
+              <p class="font-label-lg font-bold">${u.nama}</p>
+              <p class="text-xs text-on-surface-variant">${u.divisi || 'Retail'}</p>
+            </div>
+          </div>
+          <span class="font-bold text-primary">${u.poin || 0} Pts</span>
+        </div>
+      `).join('');
+    }
+  </script>
+</body>
+</html>
